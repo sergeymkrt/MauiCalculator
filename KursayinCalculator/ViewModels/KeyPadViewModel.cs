@@ -7,15 +7,20 @@ namespace KursayinCalculator.ViewModels;
 public class KeyPadViewModel : INotifyPropertyChanged
 {
     public event PropertyChangedEventHandler PropertyChanged;
-    
+
+    #region Commands
+    public ICommand AddCharCommand { get; private set; }
+    public ICommand DeleteCharCommand { get; private set; }
+    public ICommand ClearTextCommand { get; private set; }
+
+    #endregion
+
+    #region Properties
+
     private string _inputString = "";
     private string _displayText = "";
     private char[] _specialChars = { '*', '#' };
 
-    public ICommand AddCharCommand { get; private set; }
-    public ICommand DeleteCharCommand { get; private set; }
-    
-    
     public string InputString
     {
         get => _inputString;
@@ -32,7 +37,7 @@ public class KeyPadViewModel : INotifyPropertyChanged
             }
         }
     }
-    
+
     public string DisplayText
     {
         get => _displayText;
@@ -45,7 +50,9 @@ public class KeyPadViewModel : INotifyPropertyChanged
             }
         }
     }
-    
+    #endregion
+
+
     public KeyPadViewModel()
     {
         // Command to add the key to the input string
@@ -60,8 +67,17 @@ public class KeyPadViewModel : INotifyPropertyChanged
                 // CanExecute is processed here to return true when there's something to delete
                 () => InputString.Length > 0
             );
+        ClearTextCommand =
+            new Command(
+                //Clearing the InputString
+                () => InputString = "",
+
+                //CanExecute, execute only when there is something to delete
+                () => InputString.Length > 0
+                );
     }
 
+    #region Methods
     string FormatText(string str)
     {
         bool hasNonNumbers = str.IndexOfAny(_specialChars) != -1;
@@ -82,11 +98,11 @@ public class KeyPadViewModel : INotifyPropertyChanged
 
         return formatted;
     }
-    
-    
 
     protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = "")
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
+
+    #endregion
 }
