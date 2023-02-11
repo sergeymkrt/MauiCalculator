@@ -1,6 +1,8 @@
 using System.ComponentModel;
+using System.Globalization;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
+using KursayinCalculator.Core;
 
 namespace KursayinCalculator.ViewModels;
 
@@ -12,13 +14,14 @@ public class KeyPadViewModel : INotifyPropertyChanged
     public ICommand AddCharCommand { get; private set; }
     public ICommand DeleteCharCommand { get; private set; }
     public ICommand ClearTextCommand { get; private set; }
+    public ICommand EvaluateExpressionCommand { get; private set; }
 
     #endregion
 
     #region Properties
 
-    private string _inputString = "";
-    private string _displayText = "";
+    private string _inputString = "0";
+    private string _displayText = "0";
 
     public string InputString
     {
@@ -34,6 +37,7 @@ public class KeyPadViewModel : INotifyPropertyChanged
                 // Perhaps the delete button must be enabled/disabled.
                 ((Command)DeleteCharCommand).ChangeCanExecute();
                 ((Command)ClearTextCommand).ChangeCanExecute();
+                ((Command)EvaluateExpressionCommand).ChangeCanExecute();
             }
         }
     }
@@ -56,7 +60,17 @@ public class KeyPadViewModel : INotifyPropertyChanged
     public KeyPadViewModel()
     {
         // Command to add the key to the input string
-        AddCharCommand = new Command<string>(key => InputString += key);
+        AddCharCommand = new Command<string>(key =>
+        {
+            if (InputString == "0")
+            {
+                InputString = key;
+            }
+            else
+            {
+                InputString += key;
+            }
+        });
 
         // Command to delete a character from the input string when allowed
         DeleteCharCommand =
@@ -70,9 +84,17 @@ public class KeyPadViewModel : INotifyPropertyChanged
         ClearTextCommand =
             new Command(
                 //Clearing the InputString
-                () => InputString = "",
+                () => InputString = "0",
 
                 //CanExecute, execute only when there is something to delete
+                () => InputString.Length > 0
+            );
+        EvaluateExpressionCommand =
+            new Command(
+                //Evaluating the expression
+                () => InputString = Calculator.EvaluateExpression(InputString).ToString(CultureInfo.InvariantCulture),
+                
+                //CanExecute, execute only when there is something to evaluate
                 () => InputString.Length > 0
             );
     }

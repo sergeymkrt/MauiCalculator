@@ -77,7 +77,7 @@
         <Button Text="." Command="{Binding AddCharCommand}" CommandParameter="." Grid.Row="6" Grid.Column="0" />
         <Button Text="0" Command="{Binding AddCharCommand}" CommandParameter="0" Grid.Row="6" Grid.Column="1" />
         <Button Text="+" Command="{Binding AddCharCommand}" CommandParameter="+" Grid.Row="6" Grid.Column="2" />
-        <Button Text="=" Command="{Binding AddCharCommand}" CommandParameter="=" Grid.Row="6" Grid.Column="3" />
+        <Button Text="=" Command="{Binding EvaluateExpressionCommand}" Grid.Row="6" Grid.Column="3" />
 
     </Grid>
     
