@@ -1,47 +1,84 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="KursayinCalculator.MainPage">
+             xmlns:viewModels="clr-namespace:KursayinCalculator.ViewModels"
+             x:Class="KursayinCalculator.MainPage"
+             Title="Calculator">
 
-    <ScrollView>
-        <VerticalStackLayout
-            Spacing="25"
-            Padding="30,0"
-            VerticalOptions="Center">
+    <ContentPage.BindingContext>
+        <viewModels:KeyPadViewModel />
+    </ContentPage.BindingContext>
 
-            <Image
-                Source="dotnet_bot.png"
-                SemanticProperties.Description="Cute dot net bot waving hi to you!"
-                HeightRequest="200"
-                HorizontalOptions="Center" />
+    <Grid HorizontalOptions="Center" VerticalOptions="Center"
+          ColumnSpacing="10"
+          RowSpacing="10"
+          MaximumHeightRequest="700">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="160"/>
+            <RowDefinition Height="80"/>
+            <RowDefinition Height="80" />
+            <RowDefinition Height="80" />
+            <RowDefinition Height="80" />
+            <RowDefinition Height="80" />
+            <RowDefinition Height="80" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="80" />
+            <ColumnDefinition Width="80" />
+            <ColumnDefinition Width="80" />
+            <ColumnDefinition Width="80" />
+        </Grid.ColumnDefinitions>
 
-            <Label
-                Text="Hello, World!"
-                SemanticProperties.HeadingLevel="Level1"
-                FontSize="32"
-                HorizontalOptions="Center" />
+        <Border Grid.ColumnSpan="4" Grid.Row="0">
+           <CollectionView>
+                <CollectionView.ItemsLayout>
+                    <GridItemsLayout Span="2" Orientation="Vertical" />
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
 
-            <Label
-                Text="Welcome to .NET Multi-platform App UI"
-                SemanticProperties.HeadingLevel="Level2"
-                SemanticProperties.Description="Welcome to dot net Multi platform App U I"
-                FontSize="18"
-                HorizontalOptions="Center" />
 
-            <Button
-                x:Name="CounterBtn"
-                Text="Click me"
-                SemanticProperties.Hint="Counts the number of times you click"
-                Clicked="OnCounterClicked"
-                HorizontalOptions="Center" />
-            
-            <Button
-                x:Name="KeypadBtn"
-                Text="Go To Keypad"
-                Clicked="KeypadBtn_OnClicked"
-                HorizontalOptions="Center" />
-            
-        </VerticalStackLayout>
-    </ScrollView>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
 
+        </Border>
+
+        <Border Grid.ColumnSpan="4" Grid.Column="0" Grid.Row="1"
+                StrokeThickness="10"
+                BackgroundColor="LightGray">
+            <Label Text="{Binding DisplayText}"
+               Margin="0,0,10,0" FontSize="20" LineBreakMode="HeadTruncation"
+               VerticalTextAlignment="Center" HorizontalTextAlignment="End"/>
+        </Border>
+        
+        <Button Text="(" Command="{Binding AddCharCommand}" CommandParameter="(" Grid.Row="2" Grid.Column="0"/>
+        <Button Text=")" Command="{Binding AddCharCommand}" CommandParameter=")" Grid.Row="2" Grid.Column="1"/>
+        <Button Text="&#x21E6;" Command="{Binding DeleteCharCommand}" Grid.Row="2" Grid.Column="2"/>
+        <Button Text="AC" Command="{Binding ClearTextCommand}" Grid.Row="2" Grid.Column="3"/>
+
+        <Button Text="7" Command="{Binding AddCharCommand}" CommandParameter="7" Grid.Row="3" Grid.Column="0" />
+        <Button Text="8" Command="{Binding AddCharCommand}" CommandParameter="8" Grid.Row="3" Grid.Column="1" />
+        <Button Text="9" Command="{Binding AddCharCommand}" CommandParameter="9" Grid.Row="3" Grid.Column="2" />
+        <Button Text="/" Command="{Binding AddCharCommand}" CommandParameter="/" Grid.Row="3" Grid.Column="3" />
+
+
+        <Button Text="4" Command="{Binding AddCharCommand}" CommandParameter="4" Grid.Row="4" Grid.Column="0" />
+        <Button Text="5" Command="{Binding AddCharCommand}" CommandParameter="5" Grid.Row="4" Grid.Column="1" />
+        <Button Text="6" Command="{Binding AddCharCommand}" CommandParameter="6" Grid.Row="4" Grid.Column="2" />
+        <Button Text="*" Command="{Binding AddCharCommand}" CommandParameter="*" Grid.Row="4" Grid.Column="3" />
+
+        <Button Text="1" Command="{Binding AddCharCommand}" CommandParameter="1" Grid.Row="5" Grid.Column="0" />
+        <Button Text="2" Command="{Binding AddCharCommand}" CommandParameter="2" Grid.Row="5" Grid.Column="1" />
+        <Button Text="3" Command="{Binding AddCharCommand}" CommandParameter="3" Grid.Row="5" Grid.Column="2" />
+        <Button Text="-" Command="{Binding AddCharCommand}" CommandParameter="-" Grid.Row="5" Grid.Column="3" />
+
+
+        <Button Text="." Command="{Binding AddCharCommand}" CommandParameter="." Grid.Row="6" Grid.Column="0" />
+        <Button Text="0" Command="{Binding AddCharCommand}" CommandParameter="0" Grid.Row="6" Grid.Column="1" />
+        <Button Text="+" Command="{Binding AddCharCommand}" CommandParameter="+" Grid.Row="6" Grid.Column="2" />
+        <Button Text="=" Command="{Binding AddCharCommand}" CommandParameter="=" Grid.Row="6" Grid.Column="3" />
+
+    </Grid>
+    
 </ContentPage>

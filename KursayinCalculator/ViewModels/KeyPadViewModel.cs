@@ -19,7 +19,6 @@ public class KeyPadViewModel : INotifyPropertyChanged
 
     private string _inputString = "";
     private string _displayText = "";
-    private char[] _specialChars = { '*', '#' };
 
     public string InputString
     {
@@ -30,10 +29,11 @@ public class KeyPadViewModel : INotifyPropertyChanged
             {
                 _inputString = value;
                 OnPropertyChanged();
-                DisplayText = FormatText(_inputString);
+                DisplayText = _inputString;
 
                 // Perhaps the delete button must be enabled/disabled.
                 ((Command)DeleteCharCommand).ChangeCanExecute();
+                ((Command)ClearTextCommand).ChangeCanExecute();
             }
         }
     }
@@ -74,30 +74,30 @@ public class KeyPadViewModel : INotifyPropertyChanged
 
                 //CanExecute, execute only when there is something to delete
                 () => InputString.Length > 0
-                );
+            );
     }
 
     #region Methods
-    string FormatText(string str)
-    {
-        bool hasNonNumbers = str.IndexOfAny(_specialChars) != -1;
-        string formatted = str;
-
-        // Format the string based on the type of data and the length
-        if (hasNonNumbers || str.Length < 4 || str.Length > 10)
-        {
-            // Special characters exist, or the string is too small or large for special formatting
-            // Do nothing
-        }
-
-        else if (str.Length < 8)
-            formatted = string.Format("{0}-{1}", str.Substring(0, 3), str.Substring(3));
-
-        else
-            formatted = string.Format("({0}) {1}-{2}", str.Substring(0, 3), str.Substring(3, 3), str.Substring(6));
-
-        return formatted;
-    }
+    // string FormatText(string str)
+    // {
+    //     bool hasNonNumbers = str.IndexOfAny(_specialChars) != -1;
+    //     string formatted = str;
+    //
+    //     // Format the string based on the type of data and the length
+    //     if (hasNonNumbers || str.Length < 4 || str.Length > 10)
+    //     {
+    //         // Special characters exist, or the string is too small or large for special formatting
+    //         // Do nothing
+    //     }
+    //
+    //     else if (str.Length < 8)
+    //         formatted = string.Format("{0}-{1}", str.Substring(0, 3), str.Substring(3));
+    //
+    //     else
+    //         formatted = string.Format("({0}) {1}-{2}", str.Substring(0, 3), str.Substring(3, 3), str.Substring(6));
+    //
+    //     return formatted;
+    // }
 
     protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = "")
     {
