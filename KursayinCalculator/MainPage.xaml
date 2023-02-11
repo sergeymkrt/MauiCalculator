@@ -12,7 +12,7 @@
     <Grid HorizontalOptions="Center" VerticalOptions="Center"
           ColumnSpacing="10"
           RowSpacing="10"
-          MaximumHeightRequest="700">
+          MaximumHeightRequest="700" >
         <Grid.RowDefinitions>
             <RowDefinition Height="160"/>
             <RowDefinition Height="80"/>
@@ -30,7 +30,14 @@
         </Grid.ColumnDefinitions>
 
         <Border Grid.ColumnSpan="4" Grid.Row="0">
-           <CollectionView>
+            <ListView ItemsSource="{Binding Expressions}" SelectionMode="None">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <TextCell Text="{Binding Value}" Detail="{Binding Expression}"></TextCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+           <!--<CollectionView>
                 <CollectionView.ItemsLayout>
                     <GridItemsLayout Span="2" Orientation="Vertical" />
                 </CollectionView.ItemsLayout>
@@ -40,7 +47,7 @@
 
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
-            </CollectionView>
+            </CollectionView>-->
 
         </Border>
 

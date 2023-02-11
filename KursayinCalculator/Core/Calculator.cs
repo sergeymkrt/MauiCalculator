@@ -119,6 +119,4 @@ public class Calculator
                 return -1;
         }
     }
-    
-    
 }

@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
 using System.Runtime.CompilerServices;
@@ -15,7 +16,7 @@ public class KeyPadViewModel : INotifyPropertyChanged
     public ICommand DeleteCharCommand { get; private set; }
     public ICommand ClearTextCommand { get; private set; }
     public ICommand EvaluateExpressionCommand { get; private set; }
-
+    public ObservableCollection<ExpressionHistoryModel> Expressions { get; private set; } = new ObservableCollection<ExpressionHistoryModel>();
     #endregion
 
     #region Properties
@@ -92,7 +93,7 @@ public class KeyPadViewModel : INotifyPropertyChanged
         EvaluateExpressionCommand =
             new Command(
                 //Evaluating the expression
-                () => InputString = Calculator.EvaluateExpression(InputString).ToString(CultureInfo.InvariantCulture),
+                () => EvaluateExpression(),
                 
                 //CanExecute, execute only when there is something to evaluate
                 () => InputString.Length > 0
@@ -100,6 +101,15 @@ public class KeyPadViewModel : INotifyPropertyChanged
     }
 
     #region Methods
+
+    void EvaluateExpression()
+    {
+        var expression = InputString.Clone() as string;
+        var value = Calculator.EvaluateExpression(expression);
+        InputString = value.ToString(CultureInfo.InvariantCulture);
+        Expressions.Insert(0,new ExpressionHistoryModel(expression, value));
+    }
+
     // string FormatText(string str)
     // {
     //     bool hasNonNumbers = str.IndexOfAny(_specialChars) != -1;
