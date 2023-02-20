@@ -11,18 +11,27 @@ public class KeyPadViewModel : INotifyPropertyChanged
 {
     public event PropertyChangedEventHandler PropertyChanged;
 
+    public ObservableCollection<ExpressionHistoryModel> Expressions { get; private set; } = new ObservableCollection<ExpressionHistoryModel>();
     #region Commands
     public ICommand AddCharCommand { get; private set; }
     public ICommand DeleteCharCommand { get; private set; }
     public ICommand ClearTextCommand { get; private set; }
     public ICommand EvaluateExpressionCommand { get; private set; }
-    public ObservableCollection<ExpressionHistoryModel> Expressions { get; private set; } = new ObservableCollection<ExpressionHistoryModel>();
+    public ICommand RefreshCommand { get; private set; }
     #endregion
 
     #region Properties
-
+    private bool _isRefreshing;
     private string _inputString = "0";
     private string _displayText = "0";
+
+    public bool IsRefreshing { get { return _isRefreshing; }
+        set
+        {
+            _isRefreshing = value;
+            OnPropertyChanged();
+        }
+    }
 
     public string InputString
     {
@@ -93,11 +102,22 @@ public class KeyPadViewModel : INotifyPropertyChanged
         EvaluateExpressionCommand =
             new Command(
                 //Evaluating the expression
-                () => EvaluateExpression(),
+                () => {
+                    EvaluateExpression();
+                    IsRefreshing = false;
+                },
                 
                 //CanExecute, execute only when there is something to evaluate
                 () => InputString.Length > 0
             );
+        RefreshCommand =
+            new Command(
+                () => {
+                    Expressions.Clear();
+                    IsRefreshing = false;
+                },
+                () => InputString.Length > 0
+                );
     }
 
     #region Methods

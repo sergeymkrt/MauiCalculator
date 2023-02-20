@@ -8,18 +8,18 @@ public class Calculator
     {
         var postfixExpression = Infix_To_Postfix(ref infixExpression);
         
-        Stack<double> stack = new Stack<double>();
-        string[] tokens = postfixExpression.Split(' ',StringSplitOptions.RemoveEmptyEntries);
-        foreach (string token in tokens)
+        var stack = new Stack<Number>();
+        var tokens = postfixExpression.Split(' ',StringSplitOptions.RemoveEmptyEntries);
+        foreach (var token in tokens)
         {
             if (double.TryParse(token, out double value))
             {
-                stack.Push(value);
+                stack.Push(new Number(value));
             }
             else
             {
-                double operand2 = stack.Pop();
-                double operand1 = stack.Pop();
+                var operand2 = stack.Pop();
+                var operand1 = stack.Pop();
                 switch (token)
                 {
                     case "+":
@@ -35,7 +35,7 @@ public class Calculator
                         stack.Push(operand1 / operand2);
                         break;
                     case "^":
-                        stack.Push(Math.Pow(operand1,operand2));
+                        stack.Push(operand1 ^ operand2);
                         break;
                     case "%":
                         stack.Push(operand1 % operand2);
@@ -43,7 +43,7 @@ public class Calculator
                 }
             }
         }
-        return stack.Pop();
+        return stack.Pop().Value;
     }
     
     private static string Infix_To_Postfix(ref string expn)
@@ -51,13 +51,24 @@ public class Calculator
         var stk = new Stack<char>();
         var output = "";
         char _out;
+        bool isDecimal = false;
         foreach (var ch in expn)
         {
             var isAlphaBet = Regex.IsMatch(ch.ToString(), "[a-z]", RegexOptions.IgnoreCase);
 
-            if (Char.IsDigit(ch) || isAlphaBet)
+            if (Char.IsDigit(ch) || isAlphaBet || ch == '.')
             {
                 output += ch;
+                if(ch == '.')
+                {
+                    isDecimal = true;
+                }
+            }
+            else if(ch == ' '){
+                if (isDecimal)
+                    isDecimal = false;
+                else
+                    output += " ";
             }
             else
             {

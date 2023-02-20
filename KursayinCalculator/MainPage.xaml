@@ -30,25 +30,16 @@
         </Grid.ColumnDefinitions>
 
         <Border Grid.ColumnSpan="4" Grid.Row="0">
-            <ListView ItemsSource="{Binding Expressions}" SelectionMode="None">
+            <ListView ItemsSource="{Binding Expressions}" SelectionMode="None"
+                      IsPullToRefreshEnabled="True"
+                      IsRefreshing="{Binding IsRefreshing, Mode=TwoWay}"
+                      RefreshCommand="{Binding RefreshCommand}">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <TextCell Text="{Binding Value}" Detail="{Binding Expression}"></TextCell>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-           <!--<CollectionView>
-                <CollectionView.ItemsLayout>
-                    <GridItemsLayout Span="2" Orientation="Vertical" />
-                </CollectionView.ItemsLayout>
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-
-
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>-->
-
         </Border>
 
         <Border Grid.ColumnSpan="4" Grid.Column="0" Grid.Row="1"

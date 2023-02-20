@@ -1,5 +1,4 @@
-﻿using System;
-namespace KursayinCalculator.Core
+﻿namespace KursayinCalculator.Core
 {
 	public class ExpressionHistoryModel
 	{
